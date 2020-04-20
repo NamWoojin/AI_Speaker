@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <dimen name="HealthInfoTitleIconSize">40dp</dimen>
+    <dimen name="HealthInfoTitleTextSize">25dp</dimen>
+    <dimen name="HealthInfoMealIconSize">100dp</dimen>
+</resources>
