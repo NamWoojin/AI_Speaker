@@ -3,18 +3,15 @@ package com.example.android_resapi.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android_resapi.R;
-import com.example.android_resapi.ui.apicall.GetLog;
+import com.example.android_resapi.ui.apicall.GetLogCareMembers;
 
 public class CareMembersListActivity extends AppCompatActivity {
     String urlbase;
@@ -38,6 +35,7 @@ public class CareMembersListActivity extends AppCompatActivity {
                 CareMembersData cmData = (CareMembersData)parent.getAdapter().getItem(position);
                 intent.putExtra("SocialWorker",Worker_Name);
                 intent.putExtra("MemberName",cmData.getName());
+                intent.putExtra("DeviceId",cmData.getDeviceId());
                 intent.putExtra("urlbase",urlbase);
                 startActivity(intent);
             }
@@ -50,7 +48,7 @@ public class CareMembersListActivity extends AppCompatActivity {
         super.onStart();
         String params = String.format("?Worker_Name=%s",Worker_Name);
         String url = urlbase+params;
-        new GetLog(CareMembersListActivity.this,url).execute();
+        new GetLogCareMembers(CareMembersListActivity.this,url,Worker_Name).execute();
 
     }
 

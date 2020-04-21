@@ -31,11 +31,12 @@ public class CareMembersListViewAdapter extends BaseAdapter {
         return careMembersDataList.get(position) ;
     }
 
-    public void addItem(String name,String gender,String age){
+    public void addItem(String name,String gender,String age,String deviceid){
         CareMembersData cmData = new CareMembersData();
         cmData.setName(name);
         cmData.setGender(gender);
         cmData.setAge(age);
+        cmData.setDeviceId(deviceid);
         careMembersDataList.add(cmData);
     }
 
@@ -52,6 +53,7 @@ public class CareMembersListViewAdapter extends BaseAdapter {
         TextView nameTextView = (TextView) convertView.findViewById(R.id.CareMembersName_id) ;
         TextView genderTextView = (TextView)  convertView.findViewById(R.id.CareMembersGender_id);
         TextView ageTextView = (TextView) convertView.findViewById(R.id.CareMembersAge_id) ;
+        TextView deviceIdTextView = (TextView)convertView.findViewById(R.id.CareMembersDeviceId_id) ;
 
         CareMembersData listViewItem = careMembersDataList.get(position);
 
@@ -61,6 +63,7 @@ public class CareMembersListViewAdapter extends BaseAdapter {
         else
             genderTextView.setText("여");
         ageTextView.setText(String.valueOf(listViewItem.getAge()));
+        deviceIdTextView.setText(listViewItem.getDeviceId());
 
         return convertView;
     }

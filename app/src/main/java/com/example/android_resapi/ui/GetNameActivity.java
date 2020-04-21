@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.android_resapi.R;
-import com.example.android_resapi.ui.apicall.GetLog;
 
 public class GetNameActivity extends AppCompatActivity {
 

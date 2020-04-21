@@ -18,20 +18,26 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="200dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:id="@+id/CareMembersName_id"
             android:gravity="center"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:id="@+id/CareMembersGender_id"
             android:layout_weight="1"
             android:gravity="center"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:id="@+id/CareMembersAge_id"
+            android:layout_weight="1"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/CareMembersDeviceId_id"
             android:layout_weight="1"
             android:gravity="center"/>
 

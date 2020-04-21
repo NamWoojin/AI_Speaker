@@ -108,6 +108,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
     public void addItem(Drawable morningImage, Drawable afternoonImage,Drawable nightImage) {
         ListViewItem item = new ListViewItem() ;
+
         item.setType(ITEM_VIEW_TYPE_MEAL) ;
         item.setMorningImage(morningImage);
         item.setAfternoonImage(afternoonImage);

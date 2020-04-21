@@ -41,32 +41,54 @@
                     android:gravity="center"
                     android:text="사진"/>
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
                     android:gravity="center"
                     android:text="이름"/>
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20dp"
                     android:gravity="center"
                     android:text="성별"/>
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20dp"
                     android:gravity="center"
                     android:text="나이"/>
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="20dp"
+                    android:gravity="center"
+                    android:text="장치ID"/>
             </LinearLayout>
-            <ListView
+
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/CareMembersListView_id"
-                >
-            </ListView>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/CareMembersListView_id">
+                </ListView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:id="@+id/NonInfoTextView_id"
+                    android:textSize="20dp"/>
+            </LinearLayout>
+
+
         </LinearLayout>
 
 

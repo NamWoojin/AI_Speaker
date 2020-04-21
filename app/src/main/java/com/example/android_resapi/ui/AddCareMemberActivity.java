@@ -1,10 +1,7 @@
 package com.example.android_resapi.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android_resapi.R;
-import com.example.android_resapi.ui.apicall.GetLog;
 import com.example.android_resapi.ui.apicall.UpdateShadow;
 
 import org.json.JSONArray;
@@ -51,7 +47,9 @@ public class AddCareMemberActivity extends AppCompatActivity {
                 String CMName = NameEditText.getText().toString();
                 EditText AgeEditText = (EditText)findViewById(R.id.CMAgeEditText_id);
                 String CMAge = AgeEditText.getText().toString();
-                SendInformation(CMName,Gender,CMAge);
+                EditText DeviceIdEditText = (EditText)findViewById(R.id.CMDeviceEditText_id);
+                String CMDeviceId = DeviceIdEditText.getText().toString();
+                SendInformation(CMName,Gender,CMAge,CMDeviceId);
                 finish();
             }
         });
@@ -59,8 +57,10 @@ public class AddCareMemberActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Gender = "Male";
-                maleButton.setBackgroundColor(Color.LTGRAY);
+                maleButton.setBackgroundColor(Color.rgb(15,76,129));
+                maleButton.setTextColor(Color.WHITE);
                 femaleButton.setBackgroundColor(Color.TRANSPARENT);
+                femaleButton.setTextColor(Color.BLACK);
 
             }
         });
@@ -69,7 +69,9 @@ public class AddCareMemberActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Gender = "Female";
                 maleButton.setBackgroundColor(Color.TRANSPARENT);
-                femaleButton.setBackgroundColor(Color.LTGRAY);
+                maleButton.setTextColor(Color.BLACK);
+                femaleButton.setBackgroundColor(Color.rgb(15,76,129));
+                femaleButton.setTextColor(Color.WHITE);
             }
         });
 
@@ -77,10 +79,16 @@ public class AddCareMemberActivity extends AppCompatActivity {
         maleButton.callOnClick();
     }
 
-    void SendInformation(String name,String gender, String age){
+    void SendInformation(String name,String gender, String age,String deviceid){
         JSONObject payload = new JSONObject();
         try {
             JSONArray jsonArray = new JSONArray();
+
+            JSONObject tag0 = new JSONObject();
+            tag0.put("tagName", "Device_Id");
+            tag0.put("tagValue", deviceid);
+            jsonArray.put(tag0);
+
             JSONObject tag1 = new JSONObject();
             tag1.put("tagName", "SocialWorkerName");
             tag1.put("tagValue", Worker_Name);
