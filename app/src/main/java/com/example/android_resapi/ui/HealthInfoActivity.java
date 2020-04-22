@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,12 +42,67 @@ public class HealthInfoActivity extends AppCompatActivity {
     SwipeRefreshLayout refreshLayout;
     ListViewAdapter adapter = new ListViewAdapter();
     ListView listView;
+
     @Override
     protected void onStart() {
         super.onStart();
-
         GetSleepTime();
         GetMeal();
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_health_info);
+
+        Intent intent = getIntent();
+        SocialWorker = intent.getStringExtra("SocialWorker");
+        MemberName = intent.getStringExtra("MemberName");
+        DeviceId = intent.getStringExtra("DeviceId");
+        urlbase = intent.getStringExtra("urlbase");
+
+        morning_image=ContextCompat.getDrawable(this,R.drawable.meal_morning_not);
+        lunch_image=ContextCompat.getDrawable(this,R.drawable.meal_afternoon_not);
+        dinner_image=ContextCompat.getDrawable(this,R.drawable.meal_night_not);
+
+
+        TextView CareMemberNameTextView = (TextView)findViewById(R.id.CareMemberNameTextView_id);
+        CareMemberNameTextView.setText(MemberName+"님의 건강정보입니다");
+
+        listView = (ListView)findViewById(R.id.HealthInfoListView_id);
+        listView.setAdapter(adapter);
+        adapter.addItem();
+        adapter.addItem(morning_image, lunch_image, dinner_image);
+        adapter.addItem(wholeTime,sleepTime,wakeupTime);
+        adapter.addItem("70");
+
+
+        FloatingActionButton sendMessegeButton = (FloatingActionButton)findViewById(R.id.sendMessagePopUpButton_id);
+        sendMessegeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(HealthInfoActivity.this,SendMessagePopUpActivity.class);
+                intent.putExtra("MemberName",MemberName);
+                startActivity(intent);
+            }
+        });
+
+        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                GetSleepTime();
+                GetMeal();
+                listView.setAdapter(adapter);
+                refreshFinish();
+            }
+
+        });
+    }
+
+    void refreshFinish(){
+        refreshLayout.setRefreshing(false);
     }
 
     void GetSleepTime(){
@@ -69,56 +126,7 @@ public class HealthInfoActivity extends AppCompatActivity {
         String mealUrl = Mealurlbase+params;
         new GetLogMeal(HealthInfoActivity.this,mealUrl,"simple",this).execute();
     }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_health_info);
 
-        Intent intent = getIntent();
-        SocialWorker = intent.getStringExtra("SocialWorker");
-        MemberName = intent.getStringExtra("MemberName");
-        DeviceId = intent.getStringExtra("DeviceId");
-        urlbase = intent.getStringExtra("urlbase");
-
-        morning_image=ContextCompat.getDrawable(this,R.drawable.meal_morning_not);
-        lunch_image=ContextCompat.getDrawable(this,R.drawable.meal_afternoon_not);
-        dinner_image=ContextCompat.getDrawable(this,R.drawable.meal_night_not);
-
-        TextView CareMemberNameTextView = (TextView)findViewById(R.id.CareMemberNameTextView_id);
-        CareMemberNameTextView.setText(MemberName+"님의 건강정보입니다");
-
-        listView = (ListView)findViewById(R.id.HealthInfoListView_id);
-        listView.setAdapter(adapter);
-        adapter.addItem();
-        adapter.addItem(morning_image, lunch_image, dinner_image);
-        adapter.addItem(wholeTime,sleepTime,wakeupTime);
-        adapter.addItem("");
-
-
-        FloatingActionButton sendMessegeButton = (FloatingActionButton)findViewById(R.id.sendMessagePopUpButton_id);
-        sendMessegeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =  new Intent(HealthInfoActivity.this,SendMessagePopUpActivity.class);
-                intent.putExtra("MemberName",MemberName);
-                startActivity(intent);
-            }
-        });
-
-        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                listView.setAdapter(adapter);
-                refreshFinish();
-            }
-
-        });
-    }
-
-    void refreshFinish(){
-        refreshLayout.setRefreshing(false);
-    }
     public void SetHealthInfoMeal(Boolean breakfast, Boolean lunch, Boolean dinner){
         morning_image = ContextCompat.getDrawable(this,R.drawable.meal_morning_not);
         lunch_image=ContextCompat.getDrawable(this,R.drawable.meal_afternoon_not);
@@ -129,15 +137,19 @@ public class HealthInfoActivity extends AppCompatActivity {
             lunch_image= ContextCompat.getDrawable(this,R.drawable.meal_afternoon);
         if(dinner)
             dinner_image = ContextCompat.getDrawable(this,R.drawable.meal_night);
-        //adapter.addItem(morning_image, lunch_image, dinner_image);
-        //listView.setAdapter(adapter);
+
+        adapter.removeItem(1);
+        adapter.addItem(morning_image, lunch_image, dinner_image);
+        listView.setAdapter(adapter);
     }
 
     public void SetHealtInfoSleepTime(String wholeTime,String sleepTime,String wakeupTime){
         this.wholeTime = wholeTime;
         this.sleepTime = sleepTime;
         this.wakeupTime = wakeupTime;
-
-        //listView.setAdapter(adapter);
+        adapter.removeItem(2);
+        adapter.addItem(wholeTime,sleepTime,wakeupTime);
+        listView.setAdapter(adapter);
     }
+
 }

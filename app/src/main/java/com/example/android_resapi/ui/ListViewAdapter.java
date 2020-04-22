@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android_resapi.R;
@@ -69,13 +70,26 @@ public class ListViewAdapter extends BaseAdapter {
                 case ITEM_VIEW_TYPE_SLEEP:
                     convertView = inflater.inflate(R.layout.healthinfo_sleep,parent, false);
 
-                    TextView sleepTextView = (TextView)convertView.findViewById(R.id.sleepTime_id);
-                    TextView goBedTextView = (TextView)convertView.findViewById(R.id.goBedTime_id);
-                    TextView getUpTextView = (TextView)convertView.findViewById(R.id.getUpTime_id);
+                    TextView sleepText = (TextView)convertView.findViewById(R.id.sleepText_id);
+                    LinearLayout sleepInfoLinearLayout = (LinearLayout)convertView.findViewById(R.id.sleepInfoLinearLayout_id);
+                    if(listViewItem.getSleepTime().equals("정보가 없습니다.")){
+                        sleepText.setVisibility(View.VISIBLE);
+                        sleepInfoLinearLayout.setVisibility(LinearLayout.GONE);
+                        sleepText.setText(listViewItem.getSleepTime());
 
-                    sleepTextView.setText(listViewItem.getSleepTime());
-                    goBedTextView.setText(listViewItem.getGoBedTime());
-                    getUpTextView.setText(listViewItem.getGetUpTime());
+                    }
+                    else{
+                        sleepText.setVisibility(View.GONE);
+                        sleepInfoLinearLayout.setVisibility(LinearLayout.VISIBLE);
+                        TextView sleepTextView = (TextView)convertView.findViewById(R.id.sleepTime_id);
+                        TextView goBedTextView = (TextView)convertView.findViewById(R.id.goBedTime_id);
+                        TextView getUpTextView = (TextView)convertView.findViewById(R.id.getUpTime_id);
+
+                        sleepTextView.setText(listViewItem.getSleepTime());
+                        goBedTextView.setText(listViewItem.getGoBedTime());
+                        getUpTextView.setText(listViewItem.getGetUpTime());
+                    }
+
                     break;
 
                 case ITEM_VIEW_TYPE_BEAT:
@@ -104,7 +118,7 @@ public class ListViewAdapter extends BaseAdapter {
     public void addItem(){
         ListViewItem item = new ListViewItem() ;
         item.setType(ITEM_VIEW_TYPE_MEDICINE) ;
-        listViewItemList.add(item);
+        listViewItemList.add(0,item);
     }
     public void addItem(Drawable morningImage, Drawable afternoonImage,Drawable nightImage) {
         ListViewItem item = new ListViewItem() ;
@@ -113,8 +127,7 @@ public class ListViewAdapter extends BaseAdapter {
         item.setMorningImage(morningImage);
         item.setAfternoonImage(afternoonImage);
         item.setNightImage(nightImage);
-
-        listViewItemList.add(item) ;
+        listViewItemList.add(1,item) ;
     }
 
     public void addItem(String sleepTime,String goBedTime,String getUpTime) {
@@ -123,15 +136,18 @@ public class ListViewAdapter extends BaseAdapter {
         item.setSleepTime(sleepTime);
         item.setGoBedTime(goBedTime);
         item.setGetUpTime(getUpTime);
-
-        listViewItemList.add(item);
+        listViewItemList.add(2,item);
     }
 
     public void addItem(String heartBeat) {
         ListViewItem item = new ListViewItem() ;
         item.setType(ITEM_VIEW_TYPE_BEAT) ;
         item.setHeartBeat(heartBeat);
-
-        listViewItemList.add(item);
+        listViewItemList.add(3,item);
     }
+
+    public void removeItem(int index){
+        listViewItemList.remove(index);
+    }
+
 }

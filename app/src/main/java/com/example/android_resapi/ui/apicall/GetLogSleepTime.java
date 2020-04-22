@@ -31,9 +31,7 @@ public class GetLogSleepTime extends GetRequest {
     final static String TAG = "AndroidAPITest";
     String urlStr;
     String mode;
-    ListViewAdapter listViewAdapter;
     Context mContext = null;
-
     public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context) {
         super(activity);
         this.urlStr = urlStr;
@@ -46,7 +44,6 @@ public class GetLogSleepTime extends GetRequest {
         try {
             url = new URL(urlStr);
             Log.i(TAG,"urlStr="+urlStr);
-            Toast.makeText(activity,"정보를 가져오는 중...", Toast.LENGTH_SHORT).show();
         } catch (MalformedURLException e) {
             Toast.makeText(activity,"URL is invalid:"+urlStr, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -134,7 +131,7 @@ public class GetLogSleepTime extends GetRequest {
                 ((HealthInfoActivity)mContext).SetHealtInfoSleepTime(wholeTime,sleepTime,wakeupTime);
             }
             else{
-                Toast.makeText(activity,"수면정보가 없습니다.", Toast.LENGTH_SHORT).show();
+                ((HealthInfoActivity)mContext).SetHealtInfoSleepTime("정보가 없습니다.","","");
             }
 
         }

@@ -47,23 +47,26 @@ public class GetLogMeal extends GetRequest{
         Boolean breakfast = false;
         Boolean lunch = false;
         Boolean dinner = false;
-       for(int i=0;i<arrayList.size();i++){
-           if(arrayList.get(i).Type.equals("아침")){
-               breakfast = true;
-           }
-           if(arrayList.get(i).Type.equals("점심")){
-               lunch = true;
-           }
-           if(arrayList.get(i).Type.equals("저녁")){
-               dinner = true;
-           }
-       }
+        if(arrayList.size() > 0){
+            for(int i=0;i<arrayList.size();i++){
+                if(arrayList.get(i).Type.equals("아침")){
+                    breakfast = true;
+                }
+                if(arrayList.get(i).Type.equals("점심")){
+                    lunch = true;
+                }
+                if(arrayList.get(i).Type.equals("저녁")){
+                    dinner = true;
+                }
+            }
+        }
+       else{
+            Toast.makeText(activity,"식사 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+        }
 
         /*else if(mode.equals("detail")){
 
         }*/
-
-
         ((HealthInfoActivity)mContext).SetHealthInfoMeal(breakfast,lunch,dinner);
     }
 
