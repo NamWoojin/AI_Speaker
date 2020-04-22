@@ -119,7 +119,7 @@ public class GetLogSleepTime extends GetRequest {
                 sleepTime = sdf3.format(sleep);
                 wakeupTime = sdf3.format(wake);
 
-                if(diffDate>= 86400000) //하루이상 차이
+                if(diffDate>= 86400000) //하루이상 차이(그럴 일이 없는 것 같다...?)
                     viewflag= false;
                 else
                     viewflag = true;

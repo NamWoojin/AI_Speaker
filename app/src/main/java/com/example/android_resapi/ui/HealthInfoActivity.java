@@ -46,8 +46,9 @@ public class HealthInfoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        GetSleepTime();
         GetMeal();
+        GetSleepTime();
+
     }
 
 
@@ -107,22 +108,20 @@ public class HealthInfoActivity extends AppCompatActivity {
 
     void GetSleepTime(){
         long curDateMS = System.currentTimeMillis();
-        long yesterDateMS = curDateMS- 86400000*2;
-        String curDate = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss").format(new Date(curDateMS));
+        long yesterDateMS = curDateMS- 86400000;
+        String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(curDateMS));
         String yesterDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(yesterDateMS));
 
-        String params = String.format("?device_id=%s&from=%s00:00:00&to=%s",DeviceId,yesterDate,curDate);  //전날 00시부터 오늘 현재시간까지의 기록 조회
+        String params = "?device_id="+DeviceId + "&from="+yesterDate+"%2000:00:00&to="+curDate+"%2023:59:59";  //전날 00시부터 오늘 현재시간까지의 기록 조회
         String sleepUrl = SleepTimeurlbase+params;
         new GetLogSleepTime(HealthInfoActivity.this,sleepUrl,"simple",this).execute();
     }
 
     void GetMeal(){
         long curDateMS = System.currentTimeMillis();
-        long yesterDateMS = curDateMS- 86400000;
-        String curDate = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss").format(new Date(curDateMS));
-        String yesterDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(yesterDateMS));
+        String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(curDateMS));
 
-        String params = String.format("?device_id=%s&from=%s00:00:00&to=%s",DeviceId,yesterDate,curDate);  //전날 00시부터 오늘 현재시간까지의 기록 조회
+        String params = "?device_id="+DeviceId + "&from="+curDate+"%2000:00:00&to="+curDate+"%2023:59:59";  //전날 00시부터 오늘 현재시간까지의 기록 조회
         String mealUrl = Mealurlbase+params;
         new GetLogMeal(HealthInfoActivity.this,mealUrl,"simple",this).execute();
     }
