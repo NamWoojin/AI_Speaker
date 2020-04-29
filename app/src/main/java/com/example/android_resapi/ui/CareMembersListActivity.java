@@ -1,6 +1,7 @@
 package com.example.android_resapi.ui;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,6 +42,17 @@ public class CareMembersListActivity extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton addMemberButton = (FloatingActionButton)findViewById(R.id.AddMemberButton_id);
+        addMemberButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CareMembersListActivity.this,AddCareMemberActivity.class);
+                intent.putExtra("urlbase",urlbase);
+                intent.putExtra("Worker_Name",Worker_Name);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -52,31 +64,6 @@ public class CareMembersListActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
 
-        inflater.inflate(R.menu.main_menu, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected (MenuItem item)
-    {
-
-        switch(item.getItemId())
-        {
-            case R.id.AddCareMember:
-                Intent intent = new Intent(CareMembersListActivity.this,AddCareMemberActivity.class);
-                intent.putExtra("urlbase",urlbase);
-                intent.putExtra("Worker_Name",Worker_Name);
-                startActivity(intent);
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 }

@@ -136,9 +136,9 @@ public class GetLogSleepTime extends GetRequest {
 
         }
 
-        /*else if(mode.equals("detail")){
+        else if(mode.equals("detail")){
 
-        }*/
+        }
 
 
     }

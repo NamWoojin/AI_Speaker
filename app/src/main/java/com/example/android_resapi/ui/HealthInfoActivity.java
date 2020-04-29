@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -78,6 +79,29 @@ public class HealthInfoActivity extends AppCompatActivity {
         adapter.addItem(wholeTime,sleepTime,wakeupTime);
         adapter.addItem("70");
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(HealthInfoActivity.this,DetailScrollingActivity.class);
+                intent.putExtra("position",position);
+                intent.putExtra("DeviceId",DeviceId);
+                intent.putExtra("CareMember",MemberName);
+                if(position == 0){//복약주기 디테일
+                    intent.putExtra("url","");
+                }
+                else if(position == 1){//식사여부 디테일
+                    intent.putExtra("url",Mealurlbase);
+                }
+                else if(position == 2){//수면주기 디테일
+                    intent.putExtra("url",SleepTimeurlbase);
+                }
+                else if(position == 3){//심박수 디테일
+                    intent.putExtra("url","");
+                }
+                startActivity(intent);
+
+            }
+        });
 
         FloatingActionButton sendMessegeButton = (FloatingActionButton)findViewById(R.id.sendMessagePopUpButton_id);
         sendMessegeButton.setOnClickListener(new View.OnClickListener() {

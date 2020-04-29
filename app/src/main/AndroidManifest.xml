@@ -11,18 +11,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.SendMessagePopUpActivity"
-            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"></activity>
-        <activity android:name=".ui.AddCareMemberActivity" />
-        <activity android:name=".ui.GetNameActivity">
+        <activity
+            android:name=".ui.DetailScrollingActivity"
+            android:label="@string/title_activity_detail_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.SendMessagePopUpActivity"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
+        <activity android:name=".ui.AddCareMemberActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.GetNameActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.HealthInfoActivity" />
-        <activity android:name=".ui.CareMembersListActivity" />
+        <activity android:name=".ui.HealthInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.CareMembersListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
