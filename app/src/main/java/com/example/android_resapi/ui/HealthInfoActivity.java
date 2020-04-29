@@ -22,6 +22,7 @@ import com.example.android_resapi.ui.apicall.GetLogMeal;
 import com.example.android_resapi.ui.apicall.GetLogSleepTime;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class HealthInfoActivity extends AppCompatActivity {
@@ -82,23 +83,23 @@ public class HealthInfoActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(HealthInfoActivity.this,DetailScrollingActivity.class);
-                intent.putExtra("position",position);
-                intent.putExtra("DeviceId",DeviceId);
-                intent.putExtra("CareMember",MemberName);
-                if(position == 0){//복약주기 디테일
-                    intent.putExtra("url","");
+                if(position == 0){
+
                 }
-                else if(position == 1){//식사여부 디테일
-                    intent.putExtra("url",Mealurlbase);
+                else{
+                    Intent intent = new Intent(HealthInfoActivity.this,DetailScrollingActivity.class);
+                    intent.putExtra("position",position-1);
+                    intent.putExtra("DeviceId",DeviceId);
+
+                    if(position == 1){
+                        intent.putExtra("urlbase",Mealurlbase);
+                    }
+                    else if(position == 2){
+                        intent.putExtra("urlbase",SleepTimeurlbase);
+                    }
+                    startActivity(intent);
                 }
-                else if(position == 2){//수면주기 디테일
-                    intent.putExtra("url",SleepTimeurlbase);
-                }
-                else if(position == 3){//심박수 디테일
-                    intent.putExtra("url","");
-                }
-                startActivity(intent);
+
 
             }
         });
@@ -131,10 +132,14 @@ public class HealthInfoActivity extends AppCompatActivity {
     }
 
     void GetSleepTime(){
-        long curDateMS = System.currentTimeMillis();
-        long yesterDateMS = curDateMS- 86400000;
-        String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(curDateMS));
-        String yesterDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(yesterDateMS));
+
+        Date today = new Date();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        String curDate = date.format(today);
+
+        Calendar twoWeekBefore = Calendar.getInstance();
+        twoWeekBefore.add(Calendar.DATE, -1);
+        String yesterDate = new java.text.SimpleDateFormat("yyyy-MM-dd").format(twoWeekBefore.getTime());
 
         String params = "?device_id="+DeviceId + "&from="+yesterDate+"%2000:00:00&to="+curDate+"%2023:59:59";  //전날 00시부터 오늘 현재시간까지의 기록 조회
         String sleepUrl = SleepTimeurlbase+params;
@@ -142,8 +147,9 @@ public class HealthInfoActivity extends AppCompatActivity {
     }
 
     void GetMeal(){
-        long curDateMS = System.currentTimeMillis();
-        String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(curDateMS));
+        Date today = new Date();
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        String curDate = date.format(today);
 
         String params = "?device_id="+DeviceId + "&from="+curDate+"%2000:00:00&to="+curDate+"%2023:59:59";  //전날 00시부터 오늘 현재시간까지의 기록 조회
         String mealUrl = Mealurlbase+params;

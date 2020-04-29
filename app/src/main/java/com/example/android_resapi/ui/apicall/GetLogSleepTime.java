@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.example.android_resapi.R;
 import com.example.android_resapi.httpconnection.GetRequest;
 import com.example.android_resapi.ui.CareMembersListViewAdapter;
+import com.example.android_resapi.ui.DetailItemData;
+import com.example.android_resapi.ui.DetailScrollingActivity;
 import com.example.android_resapi.ui.HealthInfoActivity;
 import com.example.android_resapi.ui.ListViewAdapter;
 import com.example.android_resapi.ui.ListViewItem;
@@ -25,6 +27,7 @@ import java.net.URL;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class GetLogSleepTime extends GetRequest {
@@ -32,11 +35,19 @@ public class GetLogSleepTime extends GetRequest {
     String urlStr;
     String mode;
     Context mContext = null;
+    int loadNum = 0;
     public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context) {
         super(activity);
         this.urlStr = urlStr;
         this.mode = mode;
         this.mContext = context;
+    }
+    public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context,int loadNum) {
+        super(activity);
+        this.urlStr = urlStr;
+        this.mode = mode;
+        this.mContext = context;
+        this.loadNum = loadNum;
     }
 
     @Override
@@ -137,6 +148,46 @@ public class GetLogSleepTime extends GetRequest {
         }
 
         else if(mode.equals("detail")){
+            ArrayList<DetailItemData> itemData = new ArrayList<>();
+            DetailItemData did;
+            for(int i= 0;i<14;i++){
+                did = new DetailItemData();
+                Calendar day = Calendar.getInstance();
+                day.add(Calendar.DATE, (loadNum)*(-14)-i);
+                did.setDate(new java.text.SimpleDateFormat("yyyy-MM-dd").format(day.getTime()));
+                itemData.add(did);
+            }
+
+            for(int i = 0; i< itemData.size();i++){
+                for(int j = 0; j<sleepListViewItem.size();j++){
+                    if(itemData.get(i).getDate().equals(sleepListViewItem.get(j).Time.substring(0,10))){
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        ParsePosition pos = new ParsePosition(0);
+                        Date sleep = sdf.parse(sleepListViewItem.get(j).Time,pos);
+                        SimpleDateFormat sdf1 = new SimpleDateFormat("HH시 mm분");
+                        itemData.get(i).setGoBedTime(sdf1.format(sleep));
+                        break;
+                    }
+                }
+                for(int j = 0; j<wakeListViewItem.size();j++){
+                    if(itemData.get(i).getDate().equals(wakeListViewItem.get(j).Time.substring(0,10))){
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        ParsePosition pos = new ParsePosition(0);
+                        Date sleep = sdf.parse(wakeListViewItem.get(j).Time,pos);
+                        SimpleDateFormat sdf1 = new SimpleDateFormat("HH시 mm분");
+                        itemData.get(i).setWakeUpTime(sdf1.format(sleep));
+                        break;
+                    }
+                }
+            }
+
+            if(loadNum == 0) {
+                ((DetailScrollingActivity)mContext).AddData(itemData);
+            }
+            else{
+                ((DetailScrollingActivity)mContext).AddMoreData(itemData);
+            }
+
 
         }
 
