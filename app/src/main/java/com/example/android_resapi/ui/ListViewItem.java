@@ -2,9 +2,12 @@ package com.example.android_resapi.ui;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
+
 public class ListViewItem {
     private int type;
 
+    private ArrayList<medicineListViewItem> mLVI;
 
     private Drawable morningImage ;
     private Drawable afternoonImage;
@@ -21,6 +24,14 @@ public class ListViewItem {
     }
     public int getType(){
         return this.type;
+    }
+
+
+    public ArrayList<medicineListViewItem> getmLVI() {
+        return mLVI;
+    }
+    public void setmLVI(ArrayList<medicineListViewItem> mLVI) {
+        this.mLVI = mLVI;
     }
 
     public void setMorningImage(Drawable icon) {
@@ -41,6 +52,7 @@ public class ListViewItem {
     public Drawable getNightImage(){
         return this.nightImage;
     }
+
 
     public void setSleepTime(String time){
         this.sleepTime = time;

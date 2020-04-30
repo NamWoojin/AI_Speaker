@@ -34,6 +34,7 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
         setContentView(R.layout.activity_detail_scrolling);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         itemList = new ArrayList<DetailItemData>();
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.Detail_Recycler_View);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);

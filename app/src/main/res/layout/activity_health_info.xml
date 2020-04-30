@@ -34,8 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/HealthInfoListView_id"
-                android:dividerHeight="3dp"
-                android:divider="@color/divider">
+                android:divider="@null">
 
             </ListView>
         </LinearLayout>

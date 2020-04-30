@@ -2,12 +2,14 @@ package com.example.android_resapi.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android_resapi.R;
@@ -52,8 +54,11 @@ public class ListViewAdapter extends BaseAdapter {
             switch (viewType) {
                 case ITEM_VIEW_TYPE_MEDICINE:
                     convertView = inflater.inflate(R.layout.healthinfo_medicine, parent, false);
-
-
+                    ListView medicineListView = (ListView)convertView.findViewById(R.id.medicine_ListView_id);
+                    medicineListViewAdapter mLVA = new medicineListViewAdapter();
+                    for(int i= 0;i<listViewItem.getmLVI().size();i++)
+                        mLVA.addItem(listViewItem.getmLVI().get(i));
+                    medicineListView.setAdapter(mLVA);
                     break;
                 case ITEM_VIEW_TYPE_MEAL:
                     convertView = inflater.inflate(R.layout.healthinfo_meal,parent, false);
@@ -115,9 +120,10 @@ public class ListViewAdapter extends BaseAdapter {
         return listViewItemList.get(position) ;
     }
 
-    public void addItem(){
-        ListViewItem item = new ListViewItem() ;
+    public void addItem(ArrayList<medicineListViewItem> mLVI){
+        ListViewItem item = new ListViewItem();
         item.setType(ITEM_VIEW_TYPE_MEDICINE) ;
+        item.setmLVI(mLVI);
         listViewItemList.add(0,item);
     }
     public void addItem(Drawable morningImage, Drawable afternoonImage,Drawable nightImage) {

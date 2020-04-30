@@ -19,9 +19,11 @@ import android.widget.TextView;
 
 import com.example.android_resapi.R;
 import com.example.android_resapi.ui.apicall.GetLogMeal;
+import com.example.android_resapi.ui.apicall.GetLogMedicine;
 import com.example.android_resapi.ui.apicall.GetLogSleepTime;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,6 +34,7 @@ public class HealthInfoActivity extends AppCompatActivity {
     String urlbase;
     String SleepTimeurlbase = "https://h7vyxc6832.execute-api.ap-northeast-2.amazonaws.com/SleepDB/SleepTime";
     String Mealurlbase = "https://ilpmvnc607.execute-api.ap-northeast-2.amazonaws.com/MealDB/Meal";
+    String Medicineurlbase = "https://qfz80h42a4.execute-api.ap-northeast-2.amazonaws.com/MedicationDB/Medication";
 
     Drawable morning_image;
     Drawable lunch_image;
@@ -45,12 +48,16 @@ public class HealthInfoActivity extends AppCompatActivity {
     ListViewAdapter adapter = new ListViewAdapter();
     ListView listView;
 
+    medicineListViewAdapter mLVA = new medicineListViewAdapter();
+    ListView medicineListView;
+    ArrayList<medicineListViewItem> mLVI = new ArrayList<>();
+
     @Override
     protected void onStart() {
         super.onStart();
         GetMeal();
         GetSleepTime();
-
+        GetMedicine();
     }
 
 
@@ -73,12 +80,16 @@ public class HealthInfoActivity extends AppCompatActivity {
         TextView CareMemberNameTextView = (TextView)findViewById(R.id.CareMemberNameTextView_id);
         CareMemberNameTextView.setText(MemberName+"님의 건강정보입니다");
 
+
         listView = (ListView)findViewById(R.id.HealthInfoListView_id);
         listView.setAdapter(adapter);
-        adapter.addItem();
+
+        adapter.addItem(mLVI);
         adapter.addItem(morning_image, lunch_image, dinner_image);
         adapter.addItem(wholeTime,sleepTime,wakeupTime);
         adapter.addItem("70");
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -118,6 +129,7 @@ public class HealthInfoActivity extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                GetMedicine();
                 GetSleepTime();
                 GetMeal();
                 listView.setAdapter(adapter);
@@ -156,6 +168,17 @@ public class HealthInfoActivity extends AppCompatActivity {
         new GetLogMeal(HealthInfoActivity.this,mealUrl,"simple",this).execute();
     }
 
+    void GetMedicine(){
+        String medicineUrl = Medicineurlbase+ "?device_id="+DeviceId;
+        new GetLogMedicine(HealthInfoActivity.this,medicineUrl,"simple",this).execute();
+    }
+
+    public void SetHealtInfoMedicine(ArrayList<medicineListViewItem> mLVI){
+        adapter.removeItem(0);
+        adapter.addItem(mLVI);
+        listView.setAdapter(adapter);
+    }
+
     public void SetHealthInfoMeal(Boolean breakfast, Boolean lunch, Boolean dinner){
         morning_image = ContextCompat.getDrawable(this,R.drawable.meal_morning_not);
         lunch_image=ContextCompat.getDrawable(this,R.drawable.meal_afternoon_not);
@@ -180,5 +203,7 @@ public class HealthInfoActivity extends AppCompatActivity {
         adapter.addItem(wholeTime,sleepTime,wakeupTime);
         listView.setAdapter(adapter);
     }
+
+
 
 }
