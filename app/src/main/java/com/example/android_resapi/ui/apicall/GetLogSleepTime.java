@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class GetLogSleepTime extends GetRequest {
     final static String TAG = "AndroidAPITest";
@@ -36,18 +37,20 @@ public class GetLogSleepTime extends GetRequest {
     String mode;
     Context mContext = null;
     int loadNum = 0;
+    int spinnerNum = 0;
     public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context) {
         super(activity);
         this.urlStr = urlStr;
         this.mode = mode;
         this.mContext = context;
     }
-    public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context,int loadNum) {
+    public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context,int loadNum,int spinnerNum) {
         super(activity);
         this.urlStr = urlStr;
         this.mode = mode;
         this.mContext = context;
         this.loadNum = loadNum;
+        this.spinnerNum = spinnerNum;
     }
 
     @Override
@@ -113,27 +116,32 @@ public class GetLogSleepTime extends GetRequest {
                     else
                         viewflag = false;
                 }
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                ParsePosition pos = new ParsePosition(0);
-                Date sleep = sdf.parse(sleepTime,pos);
-                pos = new ParsePosition(0);
-                Date wake = sdf.parse(wakeupTime,pos);
-                long diffDate = wake.getTime()-sleep.getTime();
+
+                if(sleepTime.compareTo(wakeupTime)<0){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
+                    ParsePosition pos = new ParsePosition(0);
+                    Date sleep = sdf.parse(sleepTime,pos);
+                    pos = new ParsePosition(0);
+                    Date wake = sdf.parse(wakeupTime,pos);
+                    long diffDate = wake.getTime()-sleep.getTime();
 
 
 
+                    long diffHours = diffDate / (60 * 60 * 1000);
+                    long diffMinutes = diffDate%(60*60*1000) / (60 * 1000);
 
-                SimpleDateFormat sdf2 = new SimpleDateFormat("HH시간 mm분");
-                wholeTime = sdf2.format(diffDate);
+                    wholeTime = diffHours + "시간 "+diffMinutes+"분";
+                    SimpleDateFormat sdf3 = new SimpleDateFormat("MM/dd HH:mm");
+                    sleepTime = sdf3.format(sleep);
+                    wakeupTime = sdf3.format(wake);
 
-                SimpleDateFormat sdf3 = new SimpleDateFormat("MM/dd HH:mm");
-                sleepTime = sdf3.format(sleep);
-                wakeupTime = sdf3.format(wake);
 
-                if(diffDate>= 86400000) //하루이상 차이(그럴 일이 없는 것 같다...?)
-                    viewflag= false;
+                }
                 else
-                    viewflag = true;
+                    viewflag = false;
+
+
+
             }
             else//취침정보 혹은 기상정보 없을 때
                 viewflag = false;
@@ -142,6 +150,7 @@ public class GetLogSleepTime extends GetRequest {
                 ((HealthInfoActivity)mContext).SetHealtInfoSleepTime(wholeTime,sleepTime,wakeupTime);
             }
             else{
+                Toast.makeText(activity,"수면 기록이 없습니다.", Toast.LENGTH_SHORT).show();
                 ((HealthInfoActivity)mContext).SetHealtInfoSleepTime("정보가 없습니다.","","");
             }
 
@@ -164,7 +173,7 @@ public class GetLogSleepTime extends GetRequest {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                         ParsePosition pos = new ParsePosition(0);
                         Date sleep = sdf.parse(sleepListViewItem.get(j).Time,pos);
-                        SimpleDateFormat sdf1 = new SimpleDateFormat("HH시 mm분");
+                        SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
                         itemData.get(i).setGoBedTime(sdf1.format(sleep));
                         break;
                     }
@@ -174,12 +183,13 @@ public class GetLogSleepTime extends GetRequest {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                         ParsePosition pos = new ParsePosition(0);
                         Date sleep = sdf.parse(wakeListViewItem.get(j).Time,pos);
-                        SimpleDateFormat sdf1 = new SimpleDateFormat("HH시 mm분");
+                        SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
                         itemData.get(i).setWakeUpTime(sdf1.format(sleep));
                         break;
                     }
                 }
             }
+
 
             if(loadNum == 0) {
                 ((DetailScrollingActivity)mContext).AddData(itemData);
@@ -188,10 +198,80 @@ public class GetLogSleepTime extends GetRequest {
                 ((DetailScrollingActivity)mContext).AddMoreData(itemData);
             }
 
+            int calculateNum = 0;
+            if(spinnerNum == 0){
+                calculateNum = 7;
+            }
+            else if(spinnerNum == 1){
+                calculateNum = 30;
+            }
+
+            if(loadNum == 0)
+                ((DetailScrollingActivity)mContext).SetAverageSleepTime(CalculateSleepTime(calculateNum,itemData),CalculateAverageTime(calculateNum,itemData,1),CalculateAverageTime(calculateNum,itemData,0));
+
 
         }
 
 
+    }
+
+    String CalculateSleepTime(int calculateNum,ArrayList<DetailItemData> itemData){
+        int countNum=0;
+        int wholeTime=0;
+        for(int i = 0;i<calculateNum;i++){
+            if(!itemData.get(i).getWakeUpTime().equals("") && !itemData.get(i+1).getGoBedTime().equals("")){
+                wholeTime += CalculateMinutefromString(itemData.get(i).getWakeUpTime()) +1440 - CalculateMinutefromString(itemData.get(i).getGoBedTime());
+                countNum++;
+            }
+
+        }
+        int averageNum = 0;
+        if(countNum != 0)
+            averageNum = wholeTime/countNum;
+
+        return averageNum/60 + "시 "+averageNum % 60 +"분";
+    }
+
+    String CalculateAverageTime(int calculateNum,ArrayList<DetailItemData> itemData,int mode){
+        int countNum=0;
+        int wholeTime = 0;
+        String string = "";
+        int averageNum = 0;
+
+        for(int i = 0; i < calculateNum;i++){
+
+            if(mode == 0)
+                string = itemData.get(i).getGoBedTime();
+            else
+                string  = itemData.get(i).getWakeUpTime();
+
+            if(!string.equals("")){
+
+                wholeTime+=CalculateMinutefromString(string);
+                countNum ++;
+            }
+
+        }
+        if(countNum != 0)
+            averageNum=wholeTime/countNum;
+
+        return averageNum/60 + "시 "+averageNum % 60 +"분";
+
+    }
+
+    int CalculateMinutefromString(String st){
+        String[] stArray = st.split(":");
+        int time = 0;
+
+        try{
+
+            time = Integer.parseInt(stArray[0].trim());
+            time = (time * 60) + Integer.parseInt(stArray[1]);
+
+        }
+        catch (NumberFormatException e){}
+        Log.i(this.getClass().getName(),"++"+time);
+        return time;
     }
 
 
@@ -242,6 +322,8 @@ public class GetLogSleepTime extends GetRequest {
             return String.format("Type : %s, Device_id: %s, Time: %s", Type,Device_id,Time);
         }
     }
+
+
 
 }
 

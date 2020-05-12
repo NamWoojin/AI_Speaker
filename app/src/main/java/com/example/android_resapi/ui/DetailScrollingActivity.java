@@ -1,6 +1,7 @@
 package com.example.android_resapi.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.android_resapi.R;
 import com.example.android_resapi.ui.apicall.GetLogSleepTime;
@@ -24,6 +29,8 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
     String DeviceId = "";
     int position = 0;
     int loadNum = 0;
+    int spinnerNum = 0;
+
 
     private DetailItemAdapter mAdapter;
     private ArrayList<DetailItemData> itemList;
@@ -33,6 +40,12 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_scrolling);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Spinner termSpinner = (Spinner)findViewById(R.id.termSpinner_id);
+
+        LinearLayout sleepBar = (LinearLayout)findViewById(R.id.averageSleepBarLinearLayout_id);
+        LinearLayout mealBar = (LinearLayout)findViewById(R.id.averageMealBarLinearLayout_id);
+        LinearLayout[] linearLayouts = {mealBar,sleepBar};
 
 
         itemList = new ArrayList<DetailItemData>();
@@ -49,8 +62,16 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
         DeviceId = intent.getStringExtra("DeviceId");
         urlbase = intent.getStringExtra("urlbase");
 
+        for(int i = 0;i < linearLayouts.length;i++){
+            if(i == position)
+                linearLayouts[i].setVisibility(LinearLayout.VISIBLE);
+            else
+                linearLayouts[i].setVisibility(LinearLayout.GONE);
+        }
+
         if(position == 0){
             setTitle("식사 패턴");
+
         }
         else if(position == 1){
             setTitle("수면 패턴");
@@ -58,13 +79,36 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
         else if(position ==2){
             setTitle("심박수");
         }
+        termSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerNum = position;
+
+
+                if(position == 1)
+                    GetSleepTime();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        loadNum = 0;
-        GetSleepTime();
+        if(position == 0){
+
+        }
+        else if(position == 1){
+            loadNum = 0;
+            GetSleepTime();
+        }
+
     }
 
     @Override
@@ -89,7 +133,7 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
 
         String params = "?device_id="+DeviceId + "&from="+yesterDate+"%2000:00:00&to="+curDate+"%2023:59:59";  //전날 00시부터 오늘 현재시간까지의 기록 조회
         String sleepUrl = urlbase+params;
-        new GetLogSleepTime(DetailScrollingActivity.this,sleepUrl,"detail",this,loadNum).execute();
+        new GetLogSleepTime(DetailScrollingActivity.this,sleepUrl,"detail",this,loadNum,this.spinnerNum).execute();
     }
 
     @Override
@@ -101,10 +145,11 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
                 itemList.clear();
                 mAdapter.setProgressMore(false);
 
-                loadNum +=1;
-                GetSleepTime();
-                ///////이부분에을 자신의 프로젝트에 맞게 설정하면 됨
-                //다음 페이지? 내용을 불러오는 부분
+                if(position == 1){
+                    loadNum +=1;
+                    GetSleepTime();
+                }
+
 
             }
         }, 2000);
@@ -117,5 +162,15 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
 
         mAdapter.addItemMore(did);
         mAdapter.setMoreLoading(false);
+    }
+
+    public void SetAverageSleepTime(String sleepTime,String wakeUpTime,String goBedTime){
+        TextView sleepTextView = (TextView)findViewById(R.id.averageSleepTimeTextView_id);
+        TextView wakeUpTextView = (TextView)findViewById(R.id.averageWakeUpTimeTextView_id);
+        TextView goBedTextView = (TextView)findViewById(R.id.averageGoBedTimeTextView_id);
+
+        sleepTextView.setText(sleepTime);
+        wakeUpTextView.setText(wakeUpTime);
+        goBedTextView.setText(goBedTime);
     }
 }

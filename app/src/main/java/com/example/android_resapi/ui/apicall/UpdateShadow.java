@@ -12,6 +12,7 @@ import com.example.android_resapi.ui.SendMessagePopUpActivity;
 public class UpdateShadow extends PutRequest {
     final static String TAG = "AndroidAPITest";
     String urlStr;
+    int mode = 0;
 
     public UpdateShadow(Activity activity, String urlStr) {
 
@@ -19,12 +20,21 @@ public class UpdateShadow extends PutRequest {
         this.urlStr = urlStr;
     }
 
+    public UpdateShadow(Activity activity, String urlStr,int mode){
+        super(activity);
+        this.urlStr = urlStr;
+        this.mode = mode;
+    }
+
     @Override
     protected void onPreExecute() {
         try {
             Log.e(TAG, urlStr);
             url = new URL(urlStr);
-            Toast.makeText(activity,"메세지 전송중...", Toast.LENGTH_SHORT).show();
+            if(mode == 1)
+                Toast.makeText(activity,"등록중", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(activity,"메세지 전송중...", Toast.LENGTH_SHORT).show();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -35,7 +45,11 @@ public class UpdateShadow extends PutRequest {
     }
     @Override
    protected void onPostExecute(String result) {
-        Toast.makeText(activity,result, Toast.LENGTH_SHORT).show();
+        if(mode == 1)
+            Toast.makeText(activity,"정상적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(activity,"메세지가 정상적으로 전송되었습니다.", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(activity,result, Toast.LENGTH_SHORT).show();
         super.activity.finish();
     }
 

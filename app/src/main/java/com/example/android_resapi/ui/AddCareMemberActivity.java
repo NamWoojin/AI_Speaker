@@ -124,7 +124,7 @@ public class AddCareMemberActivity extends AppCompatActivity {
         }
         Log.i(TAG,"payload="+payload);
         if (payload.length() >0 )
-            new UpdateShadow(AddCareMemberActivity.this,urlbase).execute(payload);
+            new UpdateShadow(AddCareMemberActivity.this,urlbase,1).execute(payload);
         else
             Toast.makeText(AddCareMemberActivity.this,"변경할 상태 정보 입력이 필요합니다", Toast.LENGTH_SHORT).show();
 

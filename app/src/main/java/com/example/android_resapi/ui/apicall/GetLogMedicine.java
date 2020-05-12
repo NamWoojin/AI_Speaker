@@ -101,6 +101,9 @@ public class GetLogMedicine extends GetRequest {
                     output.add(thing);
                 }
             }
+            else{
+                Toast.makeText(activity,"복약 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

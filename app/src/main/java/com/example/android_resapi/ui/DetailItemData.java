@@ -1,9 +1,9 @@
 package com.example.android_resapi.ui;
 
 public class DetailItemData {
-    private String Date;
-    private String goBedTime;
-    private String wakeUpTime;
+    private String Date="";
+    private String goBedTime="";
+    private String wakeUpTime="";
 
     public void setWakeUpTime(String wakeUpTime) {
         this.wakeUpTime = wakeUpTime;

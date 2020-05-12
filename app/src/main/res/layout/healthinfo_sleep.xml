@@ -35,7 +35,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="5dp"
-
                         android:text="수면 시간"
                         android:textStyle="bold"
                         android:textSize="@dimen/HealthInfoTitleTextSize"/>
@@ -93,7 +92,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="3dp"
 
-                            android:layout_gravity="bottom">
+                            android:layout_gravity="center">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -124,7 +123,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="3dp"
 
-                            android:layout_gravity="bottom">
+                            android:layout_gravity="center">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
