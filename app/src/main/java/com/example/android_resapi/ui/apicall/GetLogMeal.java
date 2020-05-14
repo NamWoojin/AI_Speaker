@@ -82,6 +82,9 @@ public class GetLogMeal extends GetRequest{
 
         else if (mode.equals("detail")) {
             ArrayList<DetailItemData> itemData = new ArrayList<>();
+            String[] BreakfastTime = new String[]{"0","0","0","0","0","0","0"};
+            String[] LunchTime = new String[]{"0","0","0","0","0","0","0"};
+            String[] DinnerTime = new String[]{"0","0","0","0","0","0","0"};
             DetailItemData did;
 
             for (int i = 0; i < 14; i++) {
@@ -96,12 +99,19 @@ public class GetLogMeal extends GetRequest{
                     for (int j = 0; j < itemData.size(); j++) {
                         if (arrayList.get(i).Time.substring(0, 10).equals(itemData.get(j).getMealDate())) {
 
-                            if (arrayList.get(i).Type.equals("아침"))
+                            if (arrayList.get(i).Type.equals("아침")) {
+                                if(j < 7)
+                                    BreakfastTime[j] = arrayList.get(i).Time.substring(11, 16);
                                 itemData.get(j).setBreakfast(true);
-                            else if (arrayList.get(i).Type.equals("점심"))
+                            } else if (arrayList.get(i).Type.equals("점심")){
+                                if(j < 7)
+                                    LunchTime[j] = arrayList.get(i).Time.substring(11, 16);
                                 itemData.get(j).setLunch(true);
-                            else if (arrayList.get(i).Type.equals("저녁"))
+                            }else if (arrayList.get(i).Type.equals("저녁")){
+                                if(j < 7)
+                                    DinnerTime[j] = arrayList.get(i).Time.substring(11,16);
                                 itemData.get(j).setDinner(true);
+                            }
 
                             break;
 
@@ -109,6 +119,10 @@ public class GetLogMeal extends GetRequest{
                         }
                     }
                 }
+            }
+
+            if(loadNum == 0 && arrayList.size() >0){
+                ((DetailScrollingActivity) mContext).SetAverageMealTime(CalculateAverageTime(BreakfastTime),CalculateAverageTime(LunchTime), CalculateAverageTime(DinnerTime));
             }
 
 
@@ -123,28 +137,17 @@ public class GetLogMeal extends GetRequest{
         }
     }
 
-    String CalculateAverageTime(ArrayList<DetailItemData> itemData,int mode){
+    String CalculateAverageTime(String[] TimeArray){
         int countNum=0;
         int wholeTime = 0;
-        String string = "";
         int averageNum = 0;
-
-        for(int i = 0; i < 7;i++){
-
-            if(mode == 0)
-                string = itemData.get(i).getGoBedTime();
-            else
-                string  = itemData.get(i).getWakeUpTime();
-
-            if(!string.equals("")){
-
-                wholeTime+=CalculateMinutefromString(string);
-                countNum ++;
+        for(int i = 0; i< TimeArray.length;i++){
+            if(!TimeArray[i].equals("0")) {
+                wholeTime += CalculateMinutefromString(TimeArray[i]);
+                ++countNum;
             }
-
         }
-        if(countNum != 0)
-            averageNum=wholeTime/countNum;
+        averageNum = wholeTime / countNum;
 
         return averageNum/60 + "시 "+averageNum % 60 +"분";
 
@@ -155,10 +158,8 @@ public class GetLogMeal extends GetRequest{
         int time = 0;
 
         try{
-
             time = Integer.parseInt(stArray[0].trim());
             time = (time * 60) + Integer.parseInt(stArray[1]);
-
         }
         catch (NumberFormatException e){}
         Log.i(this.getClass().getName(),"++"+time);
