@@ -12,7 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.DetailScrollingActivity"></activity>
+            android:name=".ui.MedicineEditActivity"
+            android:label="@string/title_activity_medicine_edit"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ui.DetailScrollingActivity" />
         <activity
             android:name=".ui.SendMessagePopUpActivity"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />

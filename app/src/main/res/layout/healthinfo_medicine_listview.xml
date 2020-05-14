@@ -46,5 +46,15 @@
                 android:textSize="20dp"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/medicine_subtract_button_LinearLayout_id"
+            android:gravity="center">
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/medicine_subtract_Button_id"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -80,9 +80,11 @@ public class HealthInfoActivity extends AppCompatActivity {
         TextView CareMemberNameTextView = (TextView)findViewById(R.id.CareMemberNameTextView_id);
         CareMemberNameTextView.setText(MemberName+"님의 건강정보입니다");
 
-
         listView = (ListView)findViewById(R.id.HealthInfoListView_id);
         listView.setAdapter(adapter);
+
+//        LinearLayout medicineSubtractButtonLinearLayout = (LinearLayout)findViewById(R.id.medicine_subtract_button_LinearLayout_id);
+//        medicineSubtractButtonLinearLayout.setVisibility(View.GONE);
 
         adapter.addItem(mLVI);
         adapter.addItem(morning_image, lunch_image, dinner_image);
@@ -94,11 +96,12 @@ public class HealthInfoActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent;
                 if(position == 0){
-
+                    intent = new Intent(HealthInfoActivity.this,MedicineEditActivity.class);
                 }
                 else{
-                    Intent intent = new Intent(HealthInfoActivity.this,DetailScrollingActivity.class);
+                    intent = new Intent(HealthInfoActivity.this,DetailScrollingActivity.class);
                     intent.putExtra("position",position-1);
                     intent.putExtra("DeviceId",DeviceId);
 
@@ -108,9 +111,10 @@ public class HealthInfoActivity extends AppCompatActivity {
                     else if(position == 2){
                         intent.putExtra("urlbase",SleepTimeurlbase);
                     }
-                    startActivity(intent);
+
                 }
 
+                startActivity(intent);
 
             }
         });
