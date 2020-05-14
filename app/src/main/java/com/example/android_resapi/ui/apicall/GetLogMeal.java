@@ -6,6 +6,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.android_resapi.httpconnection.GetRequest;
+import com.example.android_resapi.ui.DetailItemData;
+import com.example.android_resapi.ui.DetailScrollingActivity;
 import com.example.android_resapi.ui.HealthInfoActivity;
 
 import org.json.JSONArray;
@@ -14,12 +16,17 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class GetLogMeal extends GetRequest{
     final static String TAG = "AndroidAPITest";
     String urlStr;
     String mode;
+    int loadNum = 0;
 
     private Context mContext = null;
 
@@ -30,6 +37,13 @@ public class GetLogMeal extends GetRequest{
         this.mContext = context;
     }
 
+    public GetLogMeal(Activity activity, String urlStr, String mode,Context context,int loadNum) {
+        super(activity);
+        this.urlStr = urlStr;
+        this.mode = mode;
+        this.mContext = context;
+        this.loadNum = loadNum;
+    }
     @Override
     protected void onPreExecute() {
         try {
@@ -44,30 +58,111 @@ public class GetLogMeal extends GetRequest{
     @Override
     protected void onPostExecute(String jsonString) {
         ArrayList<Tag> arrayList = getArrayListFromJSONString(jsonString);
-        Boolean breakfast = false;
-        Boolean lunch = false;
-        Boolean dinner = false;
-        if(arrayList.size() > 0){
-            for(int i=0;i<arrayList.size();i++){
-                if(arrayList.get(i).Type.equals("아침")){
-                    breakfast = true;
+        if (mode.equals("simple")) {
+
+            Boolean breakfast = false;
+            Boolean lunch = false;
+            Boolean dinner = false;
+
+            if (arrayList.size() > 0) {
+                for (int i = 0; i < arrayList.size(); i++) {
+                    if (arrayList.get(i).Type.equals("아침")) {
+                        breakfast = true;
+                    } else if (arrayList.get(i).Type.equals("점심")) {
+                        lunch = true;
+                    } else if (arrayList.get(i).Type.equals("저녁")) {
+                        dinner = true;
+                    }
                 }
-                if(arrayList.get(i).Type.equals("점심")){
-                    lunch = true;
-                }
-                if(arrayList.get(i).Type.equals("저녁")){
-                    dinner = true;
+            } else {
+                Toast.makeText(activity, "식사 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+            ((HealthInfoActivity) mContext).SetHealthInfoMeal(breakfast, lunch, dinner);
+        }
+
+        else if (mode.equals("detail")) {
+            ArrayList<DetailItemData> itemData = new ArrayList<>();
+            DetailItemData did;
+
+            for (int i = 0; i < 14; i++) {
+                did = new DetailItemData();
+                Calendar day = Calendar.getInstance();
+                day.add(Calendar.DATE, (loadNum) * (-14) - i);
+                did.setMealDate(new java.text.SimpleDateFormat("yyyy-MM-dd").format(day.getTime()));
+                itemData.add(did);
+            }
+            if (arrayList.size() > 0) {
+                for (int i = 0; i < arrayList.size(); i++) {
+                    for (int j = 0; j < itemData.size(); j++) {
+                        if (arrayList.get(i).Time.substring(0, 10).equals(itemData.get(j).getMealDate())) {
+
+                            if (arrayList.get(i).Type.equals("아침"))
+                                itemData.get(j).setBreakfast(true);
+                            else if (arrayList.get(i).Type.equals("점심"))
+                                itemData.get(j).setLunch(true);
+                            else if (arrayList.get(i).Type.equals("저녁"))
+                                itemData.get(j).setDinner(true);
+
+                            break;
+
+
+                        }
+                    }
                 }
             }
-        }
-       else{
-            Toast.makeText(activity,"식사 정보가 없습니다.", Toast.LENGTH_SHORT).show();
-        }
 
-        /*else if(mode.equals("detail")){
 
-        }*/
-        ((HealthInfoActivity)mContext).SetHealthInfoMeal(breakfast,lunch,dinner);
+            if (loadNum == 0) {
+                ((DetailScrollingActivity) mContext).AddData(itemData);
+            }
+            else {
+                ((DetailScrollingActivity) mContext).AddMoreData(itemData);
+            }
+
+
+        }
+    }
+
+    String CalculateAverageTime(ArrayList<DetailItemData> itemData,int mode){
+        int countNum=0;
+        int wholeTime = 0;
+        String string = "";
+        int averageNum = 0;
+
+        for(int i = 0; i < 7;i++){
+
+            if(mode == 0)
+                string = itemData.get(i).getGoBedTime();
+            else
+                string  = itemData.get(i).getWakeUpTime();
+
+            if(!string.equals("")){
+
+                wholeTime+=CalculateMinutefromString(string);
+                countNum ++;
+            }
+
+        }
+        if(countNum != 0)
+            averageNum=wholeTime/countNum;
+
+        return averageNum/60 + "시 "+averageNum % 60 +"분";
+
+    }
+
+    int CalculateMinutefromString(String st){
+        String[] stArray = st.split(":");
+        int time = 0;
+
+        try{
+
+            time = Integer.parseInt(stArray[0].trim());
+            time = (time * 60) + Integer.parseInt(stArray[1]);
+
+        }
+        catch (NumberFormatException e){}
+        Log.i(this.getClass().getName(),"++"+time);
+        return time;
     }
 
 

@@ -3,20 +3,12 @@ package com.example.android_resapi.ui.apicall;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android_resapi.R;
 import com.example.android_resapi.httpconnection.GetRequest;
-import com.example.android_resapi.ui.CareMembersListViewAdapter;
 import com.example.android_resapi.ui.DetailItemData;
 import com.example.android_resapi.ui.DetailScrollingActivity;
 import com.example.android_resapi.ui.HealthInfoActivity;
-import com.example.android_resapi.ui.ListViewAdapter;
-import com.example.android_resapi.ui.ListViewItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,20 +29,18 @@ public class GetLogSleepTime extends GetRequest {
     String mode;
     Context mContext = null;
     int loadNum = 0;
-    int spinnerNum = 0;
     public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context) {
         super(activity);
         this.urlStr = urlStr;
         this.mode = mode;
         this.mContext = context;
     }
-    public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context,int loadNum,int spinnerNum) {
+    public GetLogSleepTime(Activity activity, String urlStr,String mode,Context context,int loadNum) {
         super(activity);
         this.urlStr = urlStr;
         this.mode = mode;
         this.mContext = context;
         this.loadNum = loadNum;
-        this.spinnerNum = spinnerNum;
     }
 
     @Override
@@ -198,13 +188,7 @@ public class GetLogSleepTime extends GetRequest {
                 ((DetailScrollingActivity)mContext).AddMoreData(itemData);
             }
 
-            int calculateNum = 0;
-            if(spinnerNum == 0){
-                calculateNum = 7;
-            }
-            else if(spinnerNum == 1){
-                calculateNum = 30;
-            }
+            int calculateNum = 7;
 
             if(loadNum == 0)
                 ((DetailScrollingActivity)mContext).SetAverageSleepTime(CalculateSleepTime(calculateNum,itemData),CalculateAverageTime(calculateNum,itemData,1),CalculateAverageTime(calculateNum,itemData,0));
