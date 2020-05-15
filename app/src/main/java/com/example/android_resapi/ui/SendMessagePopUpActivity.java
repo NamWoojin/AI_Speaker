@@ -2,14 +2,13 @@ package com.example.android_resapi.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android_resapi.R;
@@ -23,7 +22,7 @@ public class SendMessagePopUpActivity extends Activity {
     Button sendButton, cancelButton;
     String SocialWorker,MemberName;
     String urlbase = "https://3yf1ei249a.execute-api.ap-northeast-2.amazonaws.com/prod/DailyHealthCareAISpeaker";
-    TextView messageTextView;
+    EditText messageEditTextView;
     final static String TAG = "AndroidAPITest";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +35,13 @@ public class SendMessagePopUpActivity extends Activity {
 
         sendButton = (Button)findViewById(R.id.sendButton_id);
         cancelButton = (Button)findViewById(R.id.cancelButton_id);
-        messageTextView = (TextView)findViewById(R.id.MessageEditView_id);
+        messageEditTextView = (EditText)findViewById(R.id.MessageEditView_id);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendInformation(messageTextView.getText().toString());
+                if(messageEditTextView.getText().toString().length()>0)
+                SendInformation(messageEditTextView.getText().toString());
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {

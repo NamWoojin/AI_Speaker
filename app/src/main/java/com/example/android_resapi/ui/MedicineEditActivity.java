@@ -49,6 +49,15 @@ public class MedicineEditActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
+        FloatingActionButton sendMessegeButton = (FloatingActionButton)findViewById(R.id.Add_Medicine_Button_id);
+        sendMessegeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(MedicineEditActivity.this,SendMessagePopUpActivity.class);
+                //intent.putExtra("MemberName",MemberName);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
