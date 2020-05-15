@@ -30,6 +30,7 @@ public class MedicineEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine_edit);
 
+        Toast.makeText(this,"옆으로 밀어서 삭제하세요.", Toast.LENGTH_LONG).show();
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("복약 주기 수정");
         setSupportActionBar(toolbar);
