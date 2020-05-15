@@ -41,6 +41,7 @@ public class DetailScrollingActivity extends AppCompatActivity implements Detail
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_scrolling);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
         position = intent.getIntExtra("position",-1);
         DeviceId = intent.getStringExtra("DeviceId");

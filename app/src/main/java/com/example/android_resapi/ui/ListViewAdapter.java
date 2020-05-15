@@ -2,6 +2,7 @@ package com.example.android_resapi.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
 
+    Context context;
 
     @Override
     public int getCount() {
@@ -54,11 +56,27 @@ public class ListViewAdapter extends BaseAdapter {
             switch (viewType) {
                 case ITEM_VIEW_TYPE_MEDICINE:
                     convertView = inflater.inflate(R.layout.healthinfo_medicine, parent, false);
-                    ListView medicineListView = (ListView)convertView.findViewById(R.id.medicine_ListView_id);
-                    medicineListViewAdapter mLVA = new medicineListViewAdapter();
-                    for(int i= 0;i<listViewItem.getmLVI().size();i++)
-                        mLVA.addItem(listViewItem.getmLVI().get(i));
-                    medicineListView.setAdapter(mLVA);
+//                    ListView medicineListView = (ListView)convertView.findViewById(R.id.medicine_ListView_id);
+//                    medicineListViewAdapter mLVA = new medicineListViewAdapter();
+//                    for(int i= 0;i<listViewItem.getmLVI().size();i++)
+//                        mLVA.addItem(listViewItem.getmLVI().get(i));
+//                    medicineListView.setAdapter(mLVA);
+                    TextView medicineName;
+                    TextView medicineCycle;
+                    TextView medicineType;
+                    LinearLayout medicineLL = (LinearLayout)convertView.findViewById(R.id.medicine_healthInfo_LinearLayout_id);
+                    for(int i = 0;i<listViewItem.getmLVI().size();i++){
+                        medicineListLinearLayout mLLL = new medicineListLinearLayout(this.context);
+                        medicineName = (TextView)mLLL.findViewById(R.id.medicine_name_id);
+                        medicineCycle = (TextView)mLLL.findViewById(R.id.medicine_cycle_id);
+                        medicineType = (TextView)mLLL.findViewById(R.id.medicine_type_id);
+                        medicineName.setText(listViewItem.getmLVI().get(i).getMedicineName());
+                        medicineCycle.setText(listViewItem.getmLVI().get(i).getMedicineCycle());
+                        medicineType.setText(listViewItem.getmLVI().get(i).getMedicineType());
+                        medicineLL.addView(mLLL);
+                    }
+
+
                     break;
                 case ITEM_VIEW_TYPE_MEAL:
                     convertView = inflater.inflate(R.layout.healthinfo_meal,parent, false);
@@ -156,4 +174,7 @@ public class ListViewAdapter extends BaseAdapter {
         listViewItemList.remove(index);
     }
 
+    public void setContext(Context context){
+        this.context = context;
+    }
 }

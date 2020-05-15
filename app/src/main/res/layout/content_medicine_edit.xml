@@ -8,14 +8,11 @@
     tools:context=".ui.MedicineEditActivity"
     tools:showIn="@layout/activity_medicine_edit">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/medicine_edit_listview_id">
-        </ListView>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/medicine_edit_RecyclerView_id">
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>

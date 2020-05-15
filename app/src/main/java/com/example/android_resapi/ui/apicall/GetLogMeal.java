@@ -147,7 +147,8 @@ public class GetLogMeal extends GetRequest{
                 ++countNum;
             }
         }
-        averageNum = wholeTime / countNum;
+        if(countNum != 0)
+            averageNum = wholeTime / countNum;
 
         return averageNum/60 + "시 "+averageNum % 60 +"분";
 

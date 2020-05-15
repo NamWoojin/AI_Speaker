@@ -62,6 +62,7 @@ public class GetLogMedicine extends GetRequest {
                 }
                 Log.i(this.getClass().getName(),mLVIarrayList.size()+"+++++");
                 ((HealthInfoActivity)mContext).SetHealtInfoMedicine(mLVIarrayList);
+                ((HealthInfoActivity)mContext).setmLVI(mLVIarrayList);
             }
             else{
 

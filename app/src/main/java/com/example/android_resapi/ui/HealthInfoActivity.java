@@ -85,7 +85,7 @@ public class HealthInfoActivity extends AppCompatActivity {
 
 //        LinearLayout medicineSubtractButtonLinearLayout = (LinearLayout)findViewById(R.id.medicine_subtract_button_LinearLayout_id);
 //        medicineSubtractButtonLinearLayout.setVisibility(View.GONE);
-
+        adapter.setContext(HealthInfoActivity.this);
         adapter.addItem(mLVI);
         adapter.addItem(morning_image, lunch_image, dinner_image);
         adapter.addItem(wholeTime,sleepTime,wakeupTime);
@@ -99,6 +99,9 @@ public class HealthInfoActivity extends AppCompatActivity {
                 Intent intent;
                 if(position == 0){
                     intent = new Intent(HealthInfoActivity.this,MedicineEditActivity.class);
+
+                    intent.putExtra("mLVI",mLVI);
+                    intent.putExtra("urlbase",Medicineurlbase);
                 }
                 else{
                     intent = new Intent(HealthInfoActivity.this,DetailScrollingActivity.class);
@@ -111,9 +114,7 @@ public class HealthInfoActivity extends AppCompatActivity {
                     else if(position == 2){
                         intent.putExtra("urlbase",SleepTimeurlbase);
                     }
-
                 }
-
                 startActivity(intent);
 
             }
@@ -183,6 +184,7 @@ public class HealthInfoActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+
     public void SetHealthInfoMeal(Boolean breakfast, Boolean lunch, Boolean dinner){
         morning_image = ContextCompat.getDrawable(this,R.drawable.meal_morning_not);
         lunch_image=ContextCompat.getDrawable(this,R.drawable.meal_afternoon_not);
@@ -207,6 +209,11 @@ public class HealthInfoActivity extends AppCompatActivity {
         adapter.addItem(wholeTime,sleepTime,wakeupTime);
         listView.setAdapter(adapter);
     }
+
+    public void setmLVI(ArrayList<medicineListViewItem>mLVI){
+        this.mLVI = mLVI;
+    }
+
 
 
 

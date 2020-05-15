@@ -1,10 +1,14 @@
 package com.example.android_resapi.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,36 +17,46 @@ import android.widget.Toast;
 
 import com.example.android_resapi.R;
 
+import java.util.ArrayList;
+
 public class MedicineEditActivity extends AppCompatActivity {
+    String urlbase = "";
+    ArrayList<medicineListViewItem> mLVI;
+    medicineRecyclerViewAdapter mRVAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine_edit);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("복약 주기 수정");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        LinearLayout medicineSubtractButtonLinearLayout = (LinearLayout)findViewById(R.id.medicine_subtract_button_LinearLayout_id);
-        medicineSubtractButtonLinearLayout.setVisibility(View.GONE);
-    }
+        Intent intent = getIntent();
+        mLVI = (ArrayList<medicineListViewItem>) intent.getSerializableExtra("mLVI");
+        urlbase = intent.getStringExtra("urlbase");
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_subtract, menu);
-        return true;
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.medicine_edit_RecyclerView_id);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRVAdapter = new medicineRecyclerViewAdapter();
+        mRVAdapter.addItem(mLVI);
+        mRecyclerView.setAdapter(mRVAdapter);
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.medicine_add:
-                Toast.makeText(this, "add",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.medicine_subtract:
-                Toast.makeText(this, "subtract",Toast.LENGTH_SHORT).show();
-                break;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
+    
 }
+
+

@@ -204,7 +204,10 @@ public class GetLogSleepTime extends GetRequest {
         int wholeTime=0;
         for(int i = 0;i<calculateNum;i++){
             if(!itemData.get(i).getWakeUpTime().equals("") && !itemData.get(i+1).getGoBedTime().equals("")){
-                wholeTime += CalculateMinutefromString(itemData.get(i).getWakeUpTime()) +1440 - CalculateMinutefromString(itemData.get(i).getGoBedTime());
+                if(CalculateMinutefromString(itemData.get(i).getGoBedTime()) <360)// 아침 6시 이전 취침
+                    wholeTime += CalculateMinutefromString(itemData.get(i).getWakeUpTime()) - CalculateMinutefromString(itemData.get(i).getGoBedTime());
+                else
+                    wholeTime += CalculateMinutefromString(itemData.get(i).getWakeUpTime()) +1440 - CalculateMinutefromString(itemData.get(i).getGoBedTime());
                 countNum++;
             }
 
@@ -230,16 +233,21 @@ public class GetLogSleepTime extends GetRequest {
                 string  = itemData.get(i).getWakeUpTime();
 
             if(!string.equals("")){
-
-                wholeTime+=CalculateMinutefromString(string);
+                int time=CalculateMinutefromString(string);
+                if(time<360 && mode == 0) // 새벽 취침 평균 시간 구하기
+                    time += 1440;
+                wholeTime+=time;
                 countNum ++;
             }
 
         }
         if(countNum != 0)
             averageNum=wholeTime/countNum;
-
-        return averageNum/60 + "시 "+averageNum % 60 +"분";
+        int hour = averageNum/60;
+        int minute = averageNum % 60;
+        if(hour>= 24)
+            hour -= 24;
+        return hour + "시 "+minute+"분";
 
     }
 

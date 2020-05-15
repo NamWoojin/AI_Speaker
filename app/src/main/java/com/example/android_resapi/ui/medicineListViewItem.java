@@ -2,7 +2,9 @@ package com.example.android_resapi.ui;
 
 import android.graphics.drawable.Drawable;
 
-public class medicineListViewItem {
+import java.io.Serializable;
+
+public class medicineListViewItem implements Serializable {
 
     private String medicineType="";
     private String medicineName="";

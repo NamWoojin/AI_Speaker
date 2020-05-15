@@ -3,6 +3,7 @@ package com.example.android_resapi.ui;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -40,6 +41,8 @@ public class medicineListViewAdapter extends BaseAdapter {
         final int pos = position;
         final Context context = parent.getContext();
 
+
+
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.healthinfo_medicine_listview, null);
@@ -61,5 +64,7 @@ public class medicineListViewAdapter extends BaseAdapter {
         medicineListItem.add(mLVI);
 
     }
+
+
 
 }
